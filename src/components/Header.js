@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import './Header.css';
+
 
 const leagues = [
   { id: 39, name: "Premier League" },

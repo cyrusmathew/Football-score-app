@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-export default function LeaguePage() {
+function LeaguePage() {
   const { leagueName } = useParams();
   const [seasonMatches, setSeasonMatches] = useState({});
   const [loading, setLoading] = useState(true);
@@ -31,15 +31,25 @@ export default function LeaguePage() {
       <h2>{leagueName}</h2>
       {Object.keys(seasonMatches).sort().reverse().map(season => (
         <div key={season}>
-          <h3>Season {season}</h3>
+          <h3>
+            Season {season.toString().slice(2)}/{(parseInt(season) + 1).toString().slice(2)}
+          </h3>
           {seasonMatches[season].map(match => (
             <div key={match.match_id} style={{
               padding: '10px',
-              borderBottom: '1px solid #ccc'
+              borderBottom: '1px solid #ccc',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
             }}>
-              {match.home_team} {match.home_score} - {match.away_score} {match.away_team}
-              <br />
-              <small>{new Date(match.date).toLocaleString()}</small>
+              <img src={match.home_logo} alt="home logo" style={{ height: '20px' }} />
+              <span>{match.home_team}</span>
+              <strong>{match.home_score}</strong>
+              <span>-</span>
+              <strong>{match.away_score}</strong>
+              <span>{match.away_team}</span>
+              <img src={match.away_logo} alt="away logo" style={{ height: '20px' }} />
+              <small style={{ marginLeft: 'auto' }}>{new Date(match.date).toLocaleString()}</small>
             </div>
           ))}
         </div>
@@ -47,3 +57,5 @@ export default function LeaguePage() {
     </div>
   );
 }
+
+export default LeaguePage;

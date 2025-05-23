@@ -1,0 +1,57 @@
+
+
+.league-container {
+  padding: 20px;
+}
+
+.league-title {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.season-section {
+  margin-bottom: 30px;
+}
+
+.season-title {
+  font-size: 22px;
+  margin-bottom: 10px;
+  border-left: 4px solid #007bff;
+  padding-left: 10px;
+  color: #007bff;
+}
+
+.match-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background-color: #f9f9f9;
+  transition: background 0.2s;
+}
+
+.match-row:hover {
+  background-color: #f1f1f1;
+}
+
+.match-team {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.match-score {
+  font-weight: bold;
+  min-width: 40px;
+  text-align: center;
+}
+
+.match-date {
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: #555;
+}

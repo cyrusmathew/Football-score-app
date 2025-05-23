@@ -1,5 +1,5 @@
 .header {
-  background-color: black; /* Dark background */
+  background-color: #181414;
   padding: 15px 20px;
 }
 
@@ -8,6 +8,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 30px;
+  height: 30px;
 }
 
 .nav-link {
@@ -15,17 +16,60 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 16px;
+  padding: 5px 10px;
 }
 
 .nav-link:hover {
-  text-decoration: underline;
+  color: white;
+  background-color: #302c2c;
+  border-radius: 5px;
 }
 
 .dropdown {
   position: relative;
 }
 
+.dropdown-content {
+  display: none;
+  position: absolute;
+  left: 40%;
+  transform: translateX(-50%);
+  background-color: white;
+  min-width: 180px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 5px;
+  padding: 0;
+  margin-top: 5px;
+}
 
+.dropdown-content li {
+  list-style: none;
+}
 
+.dropdown-content li a.league-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: black;
+  padding: 10px;
+  text-decoration: none;
+  font-size: 15px;
+}
 
+.dropdown-content li a.league-link:hover {
+  background-color: #302c2c;
+  color: white;
+  border-radius: 3px;
+}
 
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.league-logo {
+  height: 20px;
+  width: 20px;
+  object-fit: contain;
+  border-radius: 3px;
+}

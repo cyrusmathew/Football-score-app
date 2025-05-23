@@ -1,18 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
 
+const leagueIDs = [39, 140, 135, 78, 61]; // Top 5 leagues
 
-const leagues = [
-  { id: 39, name: "Premier League" },
-  { id: 140, name: "La Liga" },
-  { id: 135, name: "Serie A" },
-  { id: 78, name: "Bundesliga" },
-  { id: 61, name: "Ligue 1" },
-];
+function Header() {
+  const [leagues, setLeagues] = useState([]);
 
-function Header(){
-    return (
+  useEffect(() => {
+    fetch('http://localhost:5000/api/leagues')
+      .then(res => res.json())
+      .then(data => {
+        const filtered = data.response
+          .filter(item => leagueIDs.includes(item.league.id))
+          .map(item => ({
+            id: item.league.id,
+            name: item.league.name,
+            logo: item.league.logo
+          }));
+        setLeagues(filtered);
+      })
+      .catch(err => console.error("Failed to load leagues:", err));
+  }, []);
+
+  return (
     <header className="header">
       <nav className="nav">
         <Link to="/" className="nav-link">Home</Link>
@@ -22,7 +33,8 @@ function Header(){
           <ul className="dropdown-content">
             {leagues.map((league) => (
               <li key={league.id}>
-                <Link to={`/league/${league.name}`} className="nav-link">
+                <Link to={`/league/${league.name}`} className="league-link">
+                  <img src={league.logo} alt={`${league.name} logo`} className="league-logo" />
                   {league.name}
                 </Link>
               </li>

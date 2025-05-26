@@ -15,7 +15,10 @@ function LeaguePage() {
   const { leagueName } = useParams();
   const [seasonMatches, setSeasonMatches] = useState({});
   const [standings, setStandings] = useState([]);
-  const [latestSeason, setLatestSeason] = useState(null);
+  const [availableSeasons, setAvailableSeasons] = useState([]);
+  const [selectedSeason, setSelectedSeason] = useState(null);
+  const [groupBy, setGroupBy] = useState("date");
+  const [selectedTeam, setSelectedTeam] = useState("All");
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("matches");
 
@@ -26,23 +29,10 @@ function LeaguePage() {
         const leagueData = data[leagueName] || {};
         setSeasonMatches(leagueData);
 
-        const allSeasons = Object.keys(leagueData);
-        if (allSeasons.length > 0) {
-          const sorted = allSeasons.sort().reverse();
-          const recentSeason = parseInt(sorted[0]);
-          setLatestSeason(recentSeason);
-
-          const leagueId = leagueNameToId[leagueName];
-          if (leagueId) {
-            fetch(`http://localhost:5000/api/standings/${leagueId}?season=${recentSeason}`)
-              .then(res => res.json())
-              .then(data => {
-                const standingsData = data.response?.[0]?.league?.standings?.[0] || [];
-                setStandings(standingsData);
-              })
-              .catch(err => console.error("Failed to fetch standings:", err));
-          }
-        }
+        const allSeasons = Object.keys(leagueData).sort().reverse();
+        setAvailableSeasons(allSeasons);
+        const recentSeason = allSeasons[0];
+        setSelectedSeason(recentSeason);
 
         setLoading(false);
       })
@@ -52,8 +42,41 @@ function LeaguePage() {
       });
   }, [leagueName]);
 
+  useEffect(() => {
+    if (!selectedSeason) return;
+
+    const leagueId = leagueNameToId[leagueName];
+    if (!leagueId) return;
+
+    fetch(`http://localhost:5000/api/standings/${leagueId}?season=${selectedSeason}`)
+      .then(res => res.json())
+      .then(data => {
+        const standingsData = data.response?.[0]?.league?.standings?.[0] || [];
+        setStandings(standingsData);
+      })
+      .catch(err => console.error("Failed to fetch standings:", err));
+  }, [selectedSeason, leagueName]);
+
   if (loading) return <p>Loading...</p>;
   if (Object.keys(seasonMatches).length === 0) return <p>No data found for {leagueName}</p>;
+
+  const matches = seasonMatches[selectedSeason] || [];
+
+  // 🧠 Build team list
+  const teamSet = new Set();
+  matches.forEach(match => {
+    teamSet.add(match.home_team);
+    teamSet.add(match.away_team);
+  });
+  const allTeams = Array.from(teamSet).sort();
+
+  // 🧠 Filter matches by selected team (if not "All")
+  const filteredMatches =
+    selectedTeam === "All"
+      ? matches
+      : matches.filter(
+          m => m.home_team === selectedTeam || m.away_team === selectedTeam
+        );
 
   return (
     <div className="league-container">
@@ -74,23 +97,77 @@ function LeaguePage() {
         </div>
       </div>
 
+      {/* Filters */}
+      <div className="filters-bar">
+        <select
+          value={selectedSeason}
+          onChange={(e) => setSelectedSeason(e.target.value)}
+          className="season-select"
+        >
+          {availableSeasons.map(season => (
+            <option key={season} value={season}>
+              Season {season.toString().slice(2)}/{(parseInt(season) + 1).toString().slice(2)}
+            </option>
+          ))}
+        </select>
 
+        {activeTab === "matches" && (
+          <div className="group-toggle">
+            <button
+              className={groupBy === "date" ? "active" : ""}
+              onClick={() => {
+                setGroupBy("date");
+                setSelectedTeam("All");
+              }}
+            >
+              Group by Date
+            </button>
+            <button
+              className={groupBy === "team" ? "active" : ""}
+              onClick={() => setGroupBy("team")}
+            >
+              Group by Team
+            </button>
+
+            {groupBy === "team" && (
+              <select
+                className="team-select"
+                value={selectedTeam}
+                onChange={(e) => setSelectedTeam(e.target.value)}
+              >
+                <option value="All">All Teams</option>
+                {allTeams.map(team => (
+                  <option key={team} value={team}>
+                    {team}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Standings */}
       {activeTab === "standings" && (
         <div className="section-wrapper">
-          <h3 className="section-header">Standings – {latestSeason}</h3>
+          <h3 className="section-header">
+            Standings – {selectedSeason.toString().slice(2)}/{(parseInt(selectedSeason) + 1).toString().slice(2)}
+          </h3>
+
           <StandingsTable standings={standings} />
         </div>
       )}
 
+      {/* Matches */}
       {activeTab === "matches" && (
         <div className="section-wrapper">
-          <h3 className="section-header">Matches</h3>
-          {Object.keys(seasonMatches).sort().reverse().map(season => (
-            <div key={season} className="season-section">
-              <h4 className="season-title">
-                Season {season.toString().slice(2)}/{(parseInt(season) + 1).toString().slice(2)}
-              </h4>
-              {seasonMatches[season].map(match => (
+          <h3 className="section-header">
+            Matches – {selectedSeason.toString().slice(2)}/{(parseInt(selectedSeason) + 1).toString().slice(2)}
+          </h3>
+
+
+          {groupBy === "date"
+            ? filteredMatches.map(match => (
                 <div key={match.match_id} className="match-row">
                   <div className="match-team">
                     <img src={match.home_logo} alt="home logo" style={{ height: '20px' }} />
@@ -107,9 +184,34 @@ function LeaguePage() {
                     {new Date(match.date).toLocaleString()}
                   </div>
                 </div>
-              ))}
-            </div>
-          ))}
+              ))
+            : allTeams
+                .filter(team => selectedTeam === "All" || team === selectedTeam)
+                .map(team => (
+                  <div key={team} className="season-section">
+                    <h4 className="season-title">{team}</h4>
+                    {filteredMatches
+                      .filter(m => m.home_team === team || m.away_team === team)
+                      .map(match => (
+                        <div key={match.match_id + team} className="match-row">
+                          <div className="match-team">
+                            <img src={match.home_logo} alt="home logo" style={{ height: '20px' }} />
+                            {match.home_team}
+                          </div>
+                          <div className="match-score">
+                            {match.home_score} - {match.away_score}
+                          </div>
+                          <div className="match-team">
+                            {match.away_team}
+                            <img src={match.away_logo} alt="away logo" style={{ height: '20px' }} />
+                          </div>
+                          <div className="match-date">
+                            {new Date(match.date).toLocaleString()}
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                ))}
         </div>
       )}
     </div>

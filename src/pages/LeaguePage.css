@@ -94,6 +94,8 @@
   margin-bottom: 8px;
   background-color: #f9f9f9;
   transition: background 0.2s;
+  text-decoration: none;
+  color: inherit;
 }
 
 .match-row:hover {

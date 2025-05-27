@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import './LeaguePage.css';
 import StandingsTable from '../components/StandingsTable';
 
@@ -62,7 +62,6 @@ function LeaguePage() {
 
   const matches = seasonMatches[selectedSeason] || [];
 
-  // 🧠 Build team list
   const teamSet = new Set();
   matches.forEach(match => {
     teamSet.add(match.home_team);
@@ -70,7 +69,6 @@ function LeaguePage() {
   });
   const allTeams = Array.from(teamSet).sort();
 
-  // 🧠 Filter matches by selected team (if not "All")
   const filteredMatches =
     selectedTeam === "All"
       ? matches
@@ -97,7 +95,6 @@ function LeaguePage() {
         </div>
       </div>
 
-      {/* Filters */}
       <div className="filters-bar">
         <select
           value={selectedSeason}
@@ -147,28 +144,24 @@ function LeaguePage() {
         )}
       </div>
 
-      {/* Standings */}
       {activeTab === "standings" && (
         <div className="section-wrapper">
           <h3 className="section-header">
             Standings – {selectedSeason.toString().slice(2)}/{(parseInt(selectedSeason) + 1).toString().slice(2)}
           </h3>
-
           <StandingsTable standings={standings} />
         </div>
       )}
 
-      {/* Matches */}
       {activeTab === "matches" && (
         <div className="section-wrapper">
           <h3 className="section-header">
             Matches – {selectedSeason.toString().slice(2)}/{(parseInt(selectedSeason) + 1).toString().slice(2)}
           </h3>
 
-
           {groupBy === "date"
             ? filteredMatches.map(match => (
-                <div key={match.match_id} className="match-row">
+                <Link to={`/match/${match.match_id}`} key={match.match_id} className="match-row">
                   <div className="match-team">
                     <img src={match.home_logo} alt="home logo" style={{ height: '20px' }} />
                     {match.home_team}
@@ -183,7 +176,7 @@ function LeaguePage() {
                   <div className="match-date">
                     {new Date(match.date).toLocaleString()}
                   </div>
-                </div>
+                </Link>
               ))
             : allTeams
                 .filter(team => selectedTeam === "All" || team === selectedTeam)
@@ -193,7 +186,11 @@ function LeaguePage() {
                     {filteredMatches
                       .filter(m => m.home_team === team || m.away_team === team)
                       .map(match => (
-                        <div key={match.match_id + team} className="match-row">
+                        <Link
+                          to={`/match/${match.match_id}`}
+                          key={match.match_id + team}
+                          className="match-row"
+                        >
                           <div className="match-team">
                             <img src={match.home_logo} alt="home logo" style={{ height: '20px' }} />
                             {match.home_team}
@@ -208,7 +205,7 @@ function LeaguePage() {
                           <div className="match-date">
                             {new Date(match.date).toLocaleString()}
                           </div>
-                        </div>
+                        </Link>
                       ))}
                   </div>
                 ))}

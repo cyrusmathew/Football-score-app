@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Home from './pages/Home';
 import About from './pages/About';
 import LeaguePage from './pages/LeaguePage';
+import MatchPage from "./pages/MatchPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/league/:leagueName" element={<LeaguePage />} />
+          <Route path="/match/:matchId" element={<MatchPage />} />
         </Routes>
       </div>
     </Router>

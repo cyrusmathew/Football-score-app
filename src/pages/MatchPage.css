@@ -1,0 +1,109 @@
+.match-page {
+  padding: 20px;
+  font-family: inherit;
+}
+
+.match-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.back-button {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.match-league {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.match-meta-bar {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.score-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f3f9ff;
+  border-radius: 10px;
+  padding: 15px 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #003366;
+  margin-bottom: 10px;
+}
+
+.score-banner .team {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.score-banner .team img {
+  height: 28px;
+  width: 28px;
+}
+
+.score-banner .score {
+  font-size: 28px;
+  font-weight: bold;
+  color: #007bff;
+  text-align: center;
+}
+
+.score-status {
+  font-size: 13px;
+  color: #444;
+  margin-top: 5px;
+}
+
+.scorers-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+.scorers-row .side {
+  width: 45%;
+}
+
+.scorers-row .right {
+  text-align: right;
+}
+
+.match-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding: 12px 0;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.match-tabs span {
+  cursor: pointer;
+  color: #444;
+  padding-bottom: 5px;
+}
+
+.match-tabs .active-tab {
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+  font-weight: 600;
+}

@@ -1,35 +1,46 @@
 import React from "react";
+import "./StandingsTable.css";
 
 export default function StandingsTable({ standings }) {
   if (!standings || standings.length === 0) return <p>No standings data available.</p>;
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full table-auto text-sm border-collapse">
-        <thead className="bg-gray-100 text-left">
+    <div className="standings-container">
+      <table className="standings-table">
+        <thead>
           <tr>
-            <th className="p-2">#</th>
-            <th className="p-2">Team</th>
-            <th className="p-2">P</th>
-            <th className="p-2">W</th>
-            <th className="p-2">D</th>
-            <th className="p-2">L</th>
-            <th className="p-2">Pts</th>
+            <th>#</th>
+            <th>Team</th>
+            <th>PL</th>
+            <th>W</th>
+            <th>D</th>
+            <th>L</th>
+            <th>GD</th>
+            <th>PTS</th>
+            <th>Form</th>
           </tr>
         </thead>
         <tbody>
           {standings.map(team => (
-            <tr key={team.team.id} className="border-t">
-              <td className="p-2">{team.rank}</td>
-              <td className="p-2 flex items-center gap-2">
-                <img src={team.team.logo} alt="" className="h-4" />
+            <tr key={team.team.id}>
+              <td>{team.rank}</td>
+              <td className="team-cell">
+                <img src={team.team.logo} alt={team.team.name} className="team-logo" />
                 {team.team.name}
               </td>
-              <td className="p-2">{team.all.played}</td>
-              <td className="p-2">{team.all.win}</td>
-              <td className="p-2">{team.all.draw}</td>
-              <td className="p-2">{team.all.lose}</td>
-              <td className="p-2">{team.points}</td>
+              <td>{team.all.played}</td>
+              <td>{team.all.win}</td>
+              <td>{team.all.draw}</td>
+              <td>{team.all.lose}</td>
+              <td>{team.goalsDiff}</td>
+              <td>{team.points}</td>
+              <td className="form-cell">
+                {team.form?.split("").map((r, idx) => (
+                  <span key={idx} className={`form-badge ${r}`}>
+                    {r}
+                  </span>
+                ))}
+              </td>
             </tr>
           ))}
         </tbody>

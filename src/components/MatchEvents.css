@@ -1,0 +1,71 @@
+.match-events-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 20px;
+}
+
+.event-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  gap: 10px;
+}
+
+.event-row.left {
+  justify-content: flex-start;
+}
+
+.event-row.right {
+  justify-content: flex-end;
+}
+
+.event-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.event-icon {
+  font-size: 16px;
+}
+
+.event-text {
+  font-size: 14px;
+  color: #333;
+  max-width: 200px;
+  word-break: break-word;
+}
+
+.event-minute {
+  font-size: 13px;
+  color: #666;
+  margin-left: 8px;
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
+.event-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0 10px;
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+.event-separator .line {
+  flex: 1;
+  height: 1px;
+  background-color: #ccc;
+  opacity: 0.6;
+}
+
+.event-separator .label {
+  white-space: nowrap;
+  padding: 0 6px;
+}
+

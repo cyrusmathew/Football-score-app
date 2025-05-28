@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import MatchEvents from "../components/MatchEvents";
 import "./MatchPage.css";
 
 function MatchPage() {
   const { matchId } = useParams();
   const [matchData, setMatchData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("facts");
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/match/${matchId}`)
@@ -22,13 +24,12 @@ function MatchPage() {
 
   if (loading) return <p>Loading match...</p>;
   if (!matchData || !matchData.info || !matchData.info[0]) {
-        return <p>Match not found or data missing.</p>;
-    }
+    return <p>Match not found or data missing.</p>;
+  }
 
-    const match = matchData.info[0].fixture;
-    const league = matchData.info[0].league;
-    const teams = matchData.info[0].teams;
-
+  const match = matchData.info[0].fixture;
+  const league = matchData.info[0].league;
+  const teams = matchData.info[0].teams;
   const goals = matchData.info[0]?.goals;
   const events = matchData.events || [];
 
@@ -42,7 +43,6 @@ function MatchPage() {
 
   return (
     <div className="match-page">
-
       {/* Top Nav */}
       <div className="match-topbar">
         <Link to="/" className="back-button">← Matches</Link>
@@ -56,10 +56,9 @@ function MatchPage() {
         <span>{new Date(match.date).toLocaleString()}</span>
         <span>{match.venue.name}</span>
         <span>{match.referee}</span>
-        {/* Optional attendance */}
       </div>
 
-      {/* Main Score Banner */}
+      {/* Score Banner */}
       <div className="score-banner">
         <div className="team">
           <img src={teams.home.logo} alt="" />
@@ -81,13 +80,45 @@ function MatchPage() {
         <div className="side right">{awayScorers.join(", ")}</div>
       </div>
 
-      {/* Tabs Placeholder */}
+      {/* Tabs */}
       <div className="match-tabs">
-        <span className="active-tab">Facts</span>
-        <span>Lineup</span>
-        <span>Stats</span>
-        <span>Events</span>
+        <span
+          className={activeTab === "facts" ? "active-tab" : ""}
+          onClick={() => setActiveTab("facts")}
+        >
+          Facts
+        </span>
+        <span
+          className={activeTab === "lineup" ? "active-tab" : ""}
+          onClick={() => setActiveTab("lineup")}
+        >
+          Lineup
+        </span>
+        <span
+          className={activeTab === "stats" ? "active-tab" : ""}
+          onClick={() => setActiveTab("stats")}
+        >
+          Stats
+        </span>
+        <span
+          className={activeTab === "events" ? "active-tab" : ""}
+          onClick={() => setActiveTab("events")}
+        >
+          Events
+        </span>
       </div>
+
+      {/* Events Tab Content */}
+      {activeTab === "events" && (
+        <div className="section-wrapper">
+          <h3 className="section-header">Match Events</h3>
+          <MatchEvents
+            events={events}
+            homeTeamId={teams.home.id}
+            awayTeamId={teams.away.id}
+          />
+        </div>
+      )}
     </div>
   );
 }

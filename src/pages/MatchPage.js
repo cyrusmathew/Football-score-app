@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import MatchEvents from "../components/MatchEvents";
 import MatchLineups from "../components/MatchLineups";
+import MatchSummary from "../components/MatchSummary";
+import MatchStats from "../components/MatchStats"; // NEW
 import "./MatchPage.css";
 
 function MatchPage() {
   const { matchId } = useParams();
   const [matchData, setMatchData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("facts");
+  const [activeTab, setActiveTab] = useState("stats");
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/match/${matchId}`)
@@ -84,22 +86,16 @@ function MatchPage() {
       {/* Tabs */}
       <div className="match-tabs">
         <span
-          className={activeTab === "facts" ? "active-tab" : ""}
-          onClick={() => setActiveTab("facts")}
+          className={activeTab === "stats" ? "active-tab" : ""}
+          onClick={() => setActiveTab("stats")}
         >
-          Facts
+          Stats
         </span>
         <span
           className={activeTab === "lineup" ? "active-tab" : ""}
           onClick={() => setActiveTab("lineup")}
         >
           Lineup
-        </span>
-        <span
-          className={activeTab === "stats" ? "active-tab" : ""}
-          onClick={() => setActiveTab("stats")}
-        >
-          Stats
         </span>
         <span
           className={activeTab === "events" ? "active-tab" : ""}
@@ -110,6 +106,15 @@ function MatchPage() {
       </div>
 
       {/* Tab Content */}
+      {activeTab === "stats" && (
+        <div className="section-wrapper">
+          <MatchSummary matchInfo={matchData.info[0]} />
+          <h3 className="section-header">Team Statistics</h3>
+          <MatchStats stats={matchData.stats} />
+        </div>
+      )}
+
+
       {activeTab === "lineup" && (
         <div className="section-wrapper">
           <h3 className="section-header">Lineups</h3>

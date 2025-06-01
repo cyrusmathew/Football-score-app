@@ -1,0 +1,98 @@
+.lineup-wrapper {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.lineup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lineup-team {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.lineup-team img {
+  height: 36px;
+  width: 36px;
+  object-fit: contain;
+}
+
+.lineup-team.right {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.formation {
+  font-size: 16px;
+  color: #333;
+}
+
+.lineup-pitch {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+
+.lineup-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.coach-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.coach-block img {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.subs-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.sub-list h4 {
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: #007bff;
+}
+
+.sub-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.sub-row img {
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.position {
+  font-size: 12px;
+  color: #888;
+  margin-left: auto;
+}

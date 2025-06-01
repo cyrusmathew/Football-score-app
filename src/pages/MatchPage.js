@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import MatchEvents from "../components/MatchEvents";
+import MatchLineups from "../components/MatchLineups";
 import "./MatchPage.css";
 
 function MatchPage() {
@@ -108,7 +109,14 @@ function MatchPage() {
         </span>
       </div>
 
-      {/* Events Tab Content */}
+      {/* Tab Content */}
+      {activeTab === "lineup" && (
+        <div className="section-wrapper">
+          <h3 className="section-header">Lineups</h3>
+          <MatchLineups lineups={matchData.lineups} />
+        </div>
+      )}
+
       {activeTab === "events" && (
         <div className="section-wrapper">
           <h3 className="section-header">Match Events</h3>

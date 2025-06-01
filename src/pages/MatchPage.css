@@ -1,7 +1,9 @@
 .match-page {
   padding: 20px;
-  font-family: inherit;
+  max-width: 1200px;
+  margin: 0 auto;
 }
+
 
 .match-topbar {
   display: flex;
